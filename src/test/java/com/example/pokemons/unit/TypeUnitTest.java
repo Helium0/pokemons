@@ -19,12 +19,13 @@ public class TypeUnitTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"Electric", "ELECTRIC", "FirE"})
+    @ValueSource(strings = {"Electric", "Fire", "Earth"})
     public void providedCorrectNameWithDifferentExamples(String name) {
         //When
         type.setName(name);
+
         //Then
-        assertEquals(name.toUpperCase(), type.getName());
+        assertEquals(name, type.getName());
     }
 
     @ParameterizedTest
@@ -32,9 +33,9 @@ public class TypeUnitTest {
     public void shouldTrimWhiteSigns(String name) {
         //When
         type.setName(name);
+
         //Then
-        String trimmed = name.trim();
-        assertEquals(trimmed.toUpperCase(), type.getName());
+        assertEquals(name.trim(), type.getName());
     }
 
     @ParameterizedTest()
@@ -44,8 +45,19 @@ public class TypeUnitTest {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> type.setName(name));
+
         //Then
         assertEquals("Type name should not be null or blank", exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"FirE", "FIRE","fire","fIRe"})
+    public void shouldThrowExceptionWhenNameHasInvalidCapitalLetter(String name) {
+        //When
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> type.setName(name));
+        //Then
+        assertEquals("Type name only first character should be capital, rest should be lowercase", exception.getMessage());
     }
 
     @Test
@@ -55,6 +67,7 @@ public class TypeUnitTest {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> type.setName(name));
+
         //Then
         assertEquals("Type name length should not be greater than 100 signs", exception.getMessage());
     }

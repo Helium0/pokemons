@@ -1,5 +1,6 @@
 package com.example.pokemons.entities;
 
+import com.example.pokemons.helper.ValidatorHelper;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.HashSet;
@@ -36,5 +37,14 @@ public class Trainer {
             inverseJoinColumns = @JoinColumn(name = "pokemon_id")
     )
     private Set<Pokemon> pokemon = new HashSet<>();
+
+
+    public void setName(String name) {
+        this.name = ValidatorHelper.validateAndTrim(name, "Trainer name");
+    }
+
+    public void setSurname(String surname) {
+        this.surname = ValidatorHelper.validateAndTrim(surname, "Trainer surname");
+    }
 
 }

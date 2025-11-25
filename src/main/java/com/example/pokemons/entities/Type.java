@@ -1,14 +1,11 @@
 package com.example.pokemons.entities;
 
+import com.example.pokemons.helper.ValidatorHelper;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.context.annotation.Bean;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Builder
@@ -32,6 +29,12 @@ public class Type {
     @OneToMany(mappedBy = "type")
     @ToString.Exclude
     private List<Pokemon> pokemonSet = new ArrayList<>();
+
+
+    public void setName(String name) {
+       this.name = ValidatorHelper.validateAndTrim(name, "Type name");
+    }
+
 
     public void addPokemon(Pokemon pokemon) {
         getPokemonSet().add(pokemon);
