@@ -38,6 +38,19 @@ public class TypeUnitTest {
         assertEquals(name.trim(), type.getName());
     }
 
+    @Test
+    public void providedCorrectTypeLengthName() {
+        //Given
+        String trainerName = "A" + "c".repeat(99);
+
+        //When
+        type.setName(trainerName);
+
+        //Then
+        assertEquals(trainerName, type.getName());
+
+    }
+
     @ParameterizedTest()
     @NullAndEmptySource
     @ValueSource(strings = {" ","    "})
@@ -56,6 +69,7 @@ public class TypeUnitTest {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> type.setName(name));
+
         //Then
         assertEquals("Type name only first character should be capital, rest should be lowercase", exception.getMessage());
     }
@@ -64,6 +78,7 @@ public class TypeUnitTest {
     public void shouldThrowExceptionWhenNameIsTooLong() {
         //Given
         String name = "A".repeat(101);
+
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> type.setName(name));
