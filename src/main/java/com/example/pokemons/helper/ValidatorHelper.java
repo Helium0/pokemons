@@ -10,6 +10,8 @@ public class ValidatorHelper {
     private static final String CAPITALS_ERROR = "%s only first character should be capital, rest should be lowercase";
     private static final String DOUBLE_MAX_MIN_AMOUNT_ERROR = "%s should not be greater than 100.00 and less than 0.00";
     private static final String DOUBLE_NULL_NAN_ERROR = "%s should not be null or NaN";
+    private static final String INTEGER_NULL_ERROR = "%s should not be null";
+    private static final String INTEGER_BELOW_ZERO = "%s should be greater or equal 0";
 
     public static String validateAndTrim(String someWord, String fieldName) {
         if (someWord == null || someWord.isBlank()) {
@@ -49,5 +51,16 @@ public class ValidatorHelper {
         }
 
         return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public static Integer validateCorrectInteger(Integer integer, String integerField) {
+        if (integer == null) {
+            throw new IllegalArgumentException(String.format(INTEGER_NULL_ERROR, integerField));
+        }
+        if (integer < 0) {
+            throw new IllegalArgumentException(String.format(INTEGER_BELOW_ZERO, integerField));
+        }
+
+        return integer;
     }
 }
