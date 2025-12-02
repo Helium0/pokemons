@@ -106,7 +106,7 @@ public class PokemonUnitTest {
 
     @ParameterizedTest
     @MethodSource(value = "com.example.pokemons.testdata.pokemon.PokemonPowerTestData#validPokemonPowerValues")
-    public void providedCorrectPokemonPowerValues(Double power, String expectedPower) {
+    public void providedCorrectPokemonPowerValues(BigDecimal power, String expectedPower) {
         //When
         pokemon.setPokemonPower(power);
 
@@ -116,7 +116,7 @@ public class PokemonUnitTest {
 
     @ParameterizedTest
     @MethodSource(value = "com.example.pokemons.testdata.pokemon.PokemonPowerTestData#invalidPokemonPowerValues")
-    public void shoudlThrowExceptionWhenPokemonPowerHasNoValue(Double power, String expectedMessage) {
+    public void shoudlThrowExceptionWhenPokemonPowerHasNoValue(BigDecimal power, String expectedMessage) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> pokemon.setPokemonPower(power));
