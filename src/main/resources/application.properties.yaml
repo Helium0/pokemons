@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: PokemonApp
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost/pokemon_party
+    username: root
+    password: admin
+  jpa:
+    show-sql: true
