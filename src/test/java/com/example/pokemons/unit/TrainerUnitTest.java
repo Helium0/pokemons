@@ -2,10 +2,8 @@ package com.example.pokemons.unit;
 
 import com.example.pokemons.entities.Trainer;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,7 +17,7 @@ public class TrainerUnitTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"Ash","Misty","Brock", "Jenna",})
+    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#validStringValues")
     public void providedCorrectTrainerName(String name) {
         //When
         trainer.setName(name);
@@ -29,78 +27,63 @@ public class TrainerUnitTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {" Ash "," Misty","Brock   "})
+    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#validStringValuesWithWhiteSigns")
     public void shouldTrimTrainerName(String name) {
         //When
-        trainer.setName(name);
+        trainer.setTrainerName(name);
 
         //Then
         assertEquals(name.trim(), trainer.getName());
     }
 
-    @Test
-    public void providedCorrectTrainerLengthName() {
-        //Given
-        String trainerName = "A" + "c".repeat(99);
-
-        //When
-        trainer.setName(trainerName);
-
-        //Then
-        assertEquals(trainerName, trainer.getName());
-
-    }
-
     @ParameterizedTest
-    @ValueSource(strings = {"ASH","FIsty","lesnaR", "alOha"})
+    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidStringValuesTooManyCapitalsOrNotAny")
     public void shouldThowExceptionWhenTrainerNameHasTooManyCapitalLetters(String name) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> trainer.setName(name));
+                () -> trainer.setTrainerName(name));
 
         //Then
         assertEquals("Trainer name only first character should be capital, rest should be lowercase", exception.getMessage());
     }
 
     @ParameterizedTest
-    @NullAndEmptySource
+    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidValuesNullOrEmpty")
     public void shouldThrowExceptionWhenNoTrainerName(String name) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> trainer.setName(name));
+                () -> trainer.setTrainerName(name));
 
         //Then
         assertEquals("Trainer name should not be null or blank", exception.getMessage());
     }
 
-    @Test
-    public void shouldThrowExceptionWhenTrainerNameIsTooLong() {
-        //Given
-        String trainerName = "A".repeat(101);
-
+    @ParameterizedTest
+    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidLengthValues")
+    public void shouldThrowExceptionWhenTrainerNameIsTooLong(String name) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> trainer.setName(trainerName));
+                () -> trainer.setTrainerName(name));
 
         //Then
         assertEquals("Trainer name length should not be greater than 100 signs", exception.getMessage());
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"Ketcham", "Lesnar", "Jane"})
+    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#validStringValues")
     public void providedCorrectTrainerSurname(String surname) {
         //When
-        trainer.setName(surname);
+        trainer.setTrainerSurname(surname);
 
         //Then
         assertEquals(surname, trainer.getSurname());
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {" ASH "," MISTY","BROCK   "})
+    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#validStringValuesWithWhiteSigns")
     public void shouldTrimTrainerSurname(String surname) {
         //When
-        trainer.setSurname(surname);
+        trainer.setTrainerSurname(surname);
 
         //Then
         assertEquals(surname.trim(), trainer.getSurname());
@@ -108,24 +91,35 @@ public class TrainerUnitTest {
 
 
     @ParameterizedTest
-    @NullAndEmptySource
+    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidValuesNullOrEmpty")
     public void shouldThrowExceptionWhenNoTrainerSurname(String surname) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> trainer.setSurname(surname));
+                () -> trainer.setTrainerSurname(surname));
 
         //Then
         assertEquals("Trainer surname should not be null or blank", exception.getMessage());
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"KEtcham", "LesnaR", "jaNe"})
+    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidStringValuesTooManyCapitalsOrNotAny")
     public void shoudlThrowExceptionWhenTrainerSurnameHasTooManyCapitalLetters(String surname) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> trainer.setSurname(surname));
+                () -> trainer.setTrainerSurname(surname));
 
         //Then
         assertEquals("Trainer surname only first character should be capital, rest should be lowercase", exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidLengthValues")
+    public void shouldThrowExceptionWhenTrainerSurnameIsTooLong(String surname) {
+        //When
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> trainer.setTrainerSurname(surname));
+
+        //Then
+        assertEquals("Trainer surname length should not be greater than 100 signs", exception.getMessage());
     }
 }
