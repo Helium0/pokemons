@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -94,6 +96,26 @@ public class TrainerServiceIntegrationTest {
 
         //Then
         assertEquals(String.format("Trainer with id %s do not exist", invalidId), exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerIntegrationTestData#validTrainer")
+    public void createTrainerAndUpdateNameAndSurname(Trainer trainer) {
+        //Given
+        Trainer createdTrainer = trainerService.createTrainer(trainer);
+        Optional<Trainer> existTrainer = trainerRepository.findById(createdTrainer.getId());
+        assertTrue(existTrainer.isPresent());
+        Trainer fromDatabase = existTrainer.get();
+        assertEquals(createdTrainer.getName(), fromDatabase.getName());
+
+        //When
+        var trainerForUpdate = Trainer.builder().name("Buba").surname("Boba").build();
+        Trainer updatedTrainer = trainerService.updateTrainer(existTrainer.get().getId(), trainerForUpdate);
+
+        //Then
+        assertEquals("Buba", updatedTrainer.getName());
+        assertEquals("Boba", updatedTrainer.getSurname());
+
     }
 
     @ParameterizedTest
