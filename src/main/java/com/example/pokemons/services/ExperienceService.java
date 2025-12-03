@@ -4,7 +4,6 @@ import com.example.pokemons.custom.exceptions.ExperienceAlreadyExistException;
 import com.example.pokemons.entities.Experience;
 import com.example.pokemons.helper.ValidatorHelper;
 import com.example.pokemons.repositories.ExperienceRepository;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,6 @@ public class ExperienceService {
 
     private final ExperienceRepository experienceRepository;
 
-    @Transactional
     public Experience createExperience(Integer expTime) {
           Integer validatedExperience = ValidatorHelper.validateCorrectInteger(expTime, "Experience time");
 
