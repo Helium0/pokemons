@@ -1,6 +1,6 @@
 package com.example.pokemons.integration.service;
 
-import com.example.pokemons.custom.exceptions.ExperienceAlreadyExistException;
+import com.example.pokemons.custom.exceptions.DuplicateAlreadyExistException;
 import com.example.pokemons.entities.Experience;
 import com.example.pokemons.repositories.ExperienceRepository;
 import com.example.pokemons.services.ExperienceService;
@@ -77,7 +77,7 @@ public class ExperienceIntegrationTest {
         assertNotNull(experience.getExpTime());
         assertEquals(expTime, experience.getExpTime());
 
-        ExperienceAlreadyExistException exception = assertThrows(ExperienceAlreadyExistException.class,
+        DuplicateAlreadyExistException exception = assertThrows(DuplicateAlreadyExistException.class,
                 () -> experienceService.createExperience(expTime));
 
         //Then
