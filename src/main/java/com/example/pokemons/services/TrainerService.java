@@ -1,5 +1,6 @@
 package com.example.pokemons.services;
 
+import com.example.pokemons.components.TrainerUpdater;
 import com.example.pokemons.entities.Trainer;
 import com.example.pokemons.helper.ValidatorHelper;
 import com.example.pokemons.repositories.TrainerRepository;
@@ -13,10 +14,12 @@ public class TrainerService {
 
     private final TrainerRepository trainerRepository;
 
+    private final TrainerUpdater trainerUpdater;
+
 
     public Trainer createTrainer(Trainer trainer) {
-        trainer.setTrainerName(ValidatorHelper.validateAndTrim(trainer.getName(),"Name"));
-        trainer.setTrainerSurname(ValidatorHelper.validateAndTrim(trainer.getSurname(),"Surname"));
+        trainer.setTrainerName(ValidatorHelper.validateAndTrimText(trainer.getName(),"Name"));
+        trainer.setTrainerSurname(ValidatorHelper.validateAndTrimText(trainer.getSurname(),"Surname"));
         return trainerRepository.save(trainer);
     }
 
@@ -32,13 +35,9 @@ public class TrainerService {
     public Trainer updateTrainer(Long id, Trainer updatedTrainer) {
         Trainer trainer = trainerRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Trainer with id %s do not exist", id)));
-        if (updatedTrainer.getName() != null) {
-            trainer.setTrainerName(ValidatorHelper.validateAndTrim(updatedTrainer.getName(), "Name"));
-        }
-        if (updatedTrainer.getSurname() != null) {
-            trainer.setTrainerSurname(ValidatorHelper.validateAndTrim(updatedTrainer.getSurname(), "Surname"));
-        }
+
+        trainerUpdater.updateTrainerFields(trainer, updatedTrainer);
+
         return trainerRepository.save(trainer);
     }
-
 }
