@@ -4,7 +4,7 @@ import com.example.pokemons.custom.exceptions.DuplicateAlreadyExistException;
 import com.example.pokemons.entities.Experience;
 import com.example.pokemons.repositories.ExperienceRepository;
 import com.example.pokemons.services.ExperienceService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;

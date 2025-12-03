@@ -4,7 +4,7 @@ import com.example.pokemons.entities.Trainer;
 import com.example.pokemons.repositories.TrainerRepository;
 import com.example.pokemons.services.TrainerService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
