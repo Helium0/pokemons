@@ -8,8 +8,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class TrainerService {
 
     private final TrainerRepository trainerRepository;
