@@ -40,11 +40,11 @@ public class Trainer {
 
 
     public void setTrainerName(String name) {
-        this.name = ValidatorHelper.validateAndTrim(name, "Trainer name");
+        this.name = ValidatorHelper.validateAndTrimText(name, "Trainer name");
     }
 
     public void setTrainerSurname(String surname) {
-        this.surname = ValidatorHelper.validateAndTrim(surname, "Trainer surname");
+        this.surname = ValidatorHelper.validateAndTrimText(surname, "Trainer surname");
     }
 
 }

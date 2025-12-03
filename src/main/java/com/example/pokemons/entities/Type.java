@@ -32,7 +32,7 @@ public class Type {
 
 
     public void setTypeName(String name) {
-       this.name = ValidatorHelper.validateAndTrim(name, "Type name");
+       this.name = ValidatorHelper.validateAndTrimText(name, "Type name");
     }
 
 
