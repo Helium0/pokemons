@@ -31,8 +31,8 @@ public class Type {
     private List<Pokemon> pokemonSet = new ArrayList<>();
 
 
-    public void setName(String name) {
-       this.name = ValidatorHelper.validateAndTrim(name, "Type name");
+    public void setTypeName(String name) {
+       this.name = ValidatorHelper.validateAndTrimText(name, "Type name");
     }
 
 

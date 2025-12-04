@@ -1,10 +1,16 @@
 package com.example.pokemons.entities;
 
+import com.example.pokemons.helper.ValidatorHelper;
 import jakarta.persistence.*;
-import lombok.Builder;
+import lombok.*;
 
 @Entity
 @Builder
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "experiences")
 public class Experience {
 
@@ -14,5 +20,9 @@ public class Experience {
     private Long id;
 
     @Column(name = "exp_time")
-    private Integer integer;
+    private Integer expTime;
+
+    public void setExperienceTime(Integer expTime) {
+        this.expTime = ValidatorHelper.validateCorrectInteger(expTime, "Experience time");
+    }
 }

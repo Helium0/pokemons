@@ -2,10 +2,8 @@ package com.example.pokemons.unit;
 
 import com.example.pokemons.entities.Type;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,54 +17,53 @@ public class TypeUnitTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"Electric", "Fire", "Earth"})
-    public void providedCorrectNameWithDifferentExamples(String name) {
+    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#validStringValues")
+    public void providedCorrectTypeName(String name) {
         //When
-        type.setName(name);
+        type.setTypeName(name);
 
         //Then
         assertEquals(name, type.getName());
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {" Electric", "  Grass  "})
-    public void shouldTrimWhiteSigns(String name) {
+    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#validStringValuesWithWhiteSigns")
+    public void shouldTrimTypeName(String name) {
         //When
-        type.setName(name);
+        type.setTypeName(name);
 
         //Then
         assertEquals(name.trim(), type.getName());
     }
 
     @ParameterizedTest()
-    @NullAndEmptySource
-    @ValueSource(strings = {" ","    "})
+    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidValuesNullOrEmpty")
     public void shouldThrowExceptionWhenNameIsInvalid(String name) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> type.setName(name));
+                () -> type.setTypeName(name));
 
         //Then
         assertEquals("Type name should not be null or blank", exception.getMessage());
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"FirE", "FIRE","fire","fIRe"})
+    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidStringValuesTooManyCapitalsOrNotAny")
     public void shouldThrowExceptionWhenNameHasInvalidCapitalLetter(String name) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> type.setName(name));
+                () -> type.setTypeName(name));
+
         //Then
         assertEquals("Type name only first character should be capital, rest should be lowercase", exception.getMessage());
     }
 
-    @Test
-    public void shouldThrowExceptionWhenNameIsTooLong() {
-        //Given
-        String name = "A".repeat(101);
+    @ParameterizedTest
+    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidLengthValues")
+    public void shouldThrowExceptionWhenNameIsTooLong(String name) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> type.setName(name));
+                () -> type.setTypeName(name));
 
         //Then
         assertEquals("Type name length should not be greater than 100 signs", exception.getMessage());

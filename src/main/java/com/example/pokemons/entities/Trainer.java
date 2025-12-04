@@ -39,12 +39,12 @@ public class Trainer {
     private Set<Pokemon> pokemon = new HashSet<>();
 
 
-    public void setName(String name) {
-        this.name = ValidatorHelper.validateAndTrim(name, "Trainer name");
+    public void setTrainerName(String name) {
+        this.name = ValidatorHelper.validateAndTrimText(name, "Trainer name");
     }
 
-    public void setSurname(String surname) {
-        this.surname = ValidatorHelper.validateAndTrim(surname, "Trainer surname");
+    public void setTrainerSurname(String surname) {
+        this.surname = ValidatorHelper.validateAndTrimText(surname, "Trainer surname");
     }
 
 }
