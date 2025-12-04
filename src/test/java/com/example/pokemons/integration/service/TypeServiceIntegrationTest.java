@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-public class TypeIntegrationTest {
+public class TypeServiceIntegrationTest {
 
     @Autowired
     private TypeService typeService;

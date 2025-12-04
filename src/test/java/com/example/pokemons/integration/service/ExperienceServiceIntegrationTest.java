@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-public class ExperienceIntegrationTest {
+public class ExperienceServiceIntegrationTest {
 
     @Autowired
     private ExperienceRepository experienceRepository;
