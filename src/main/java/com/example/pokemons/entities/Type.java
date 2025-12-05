@@ -20,7 +20,7 @@ public class Type {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -34,7 +34,6 @@ public class Type {
     public void setTypeName(String name) {
        this.name = ValidatorHelper.validateAndTrimText(name, "Type name");
     }
-
 
     public void addPokemon(Pokemon pokemon) {
         getPokemonSet().add(pokemon);
