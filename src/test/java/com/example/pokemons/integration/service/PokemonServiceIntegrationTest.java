@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,17 +31,17 @@ public class PokemonServiceIntegrationTest {
     private TypeRepository typeRepository;
 
     @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.pokemon.PokemonIntegrationTestData#validPokemonData")
-    public void providedValidPokemonDataAndPokemonShouldBeCreated(String name, BigDecimal power, String type) {
+    @MethodSource(value = "com.example.pokemons.testdata.pokemon.PokemonTestData#validPokemonData")
+    public void providedValidPokemonDataAndPokemonShouldBeCreated(String name, BigDecimal power, String desc, Type type) {
         //When
-        Pokemon pokemon = pokemonService.createPokemon(name, power, null, type);
+        Pokemon pokemon = pokemonService.createPokemon(name, power, desc, type.getName());
         Optional<Pokemon> savedPokemonOnDatabase = pokemonRepository.findById(pokemon.getId());
 
         //Then
         assertEquals(name, pokemon.getName());
         assertEquals(power, pokemon.getPower());
-        assertEquals(type, pokemon.getType().getName());
-        assertEquals("", pokemon.getDescription());
+        assertEquals(type.getName(), pokemon.getType().getName());
+        assertEquals(desc, pokemon.getDescription());
         assertEquals(pokemon.getId(), savedPokemonOnDatabase.get().getId());
         assertEquals(pokemon.getName(), savedPokemonOnDatabase.get().getName());
     }
@@ -118,6 +119,93 @@ public class PokemonServiceIntegrationTest {
 
         //Then
         assertEquals("Name should not be null or blank", exception.getMessage());
+    }
+
+    @Test
+    public void findByTypeShouldReturnOnlyPokemonsWithGivenType() {
+        //Given
+        var electricType = Type.builder().name("Electric").build();
+        var waterType = Type.builder().name("Water").build();
+        var savedElectricType = typeRepository.save(electricType);
+        var savedWaterType = typeRepository.save(waterType);
+
+        //When
+        pokemonService.createPokemon("Raichu",
+                new BigDecimal("99.00"),
+                null,
+                electricType.getName());
+
+        pokemonService.createPokemon("Pikachu",
+                new BigDecimal("99.60"),
+                null,
+                electricType.getName());
+
+        pokemonService.createPokemon("Psyduck",
+                new BigDecimal("50.00"),
+                null,
+                waterType.getName());
+
+        List<Pokemon> waterPokemons = pokemonRepository.findByType(savedWaterType);
+        List<Pokemon> electricPokemons = pokemonRepository.findByType(savedElectricType);
+        List<Pokemon> allPokemons = pokemonRepository.findAll();
+
+        //Then
+        assertEquals(1, waterPokemons.size());
+        assertEquals(2, electricPokemons.size());
+        assertEquals(3, allPokemons.size());
+    }
+
+    @Test
+    public void testCustomDeleteMethod() {
+        //Given
+        var waterType = typeRepository.save(Type.builder().name("Water").build());
+
+        //When
+        var createdPokemon = pokemonService.createPokemon("Psyduck",
+                new BigDecimal("50.00"),
+                null,
+                waterType.getName());
+
+        Optional<Pokemon> foundedPokemon = pokemonRepository.findById(createdPokemon.getId());
+
+        assertTrue(foundedPokemon.isPresent());
+        assertEquals(createdPokemon.getName(), foundedPokemon.get().getName());
+
+        pokemonRepository.deletePokemonByNameAndPowerAndType(createdPokemon.getName(),createdPokemon.getPower(),createdPokemon.getType());
+
+        //Then
+        Optional<Pokemon> deletedPokemon = pokemonRepository.findById(createdPokemon.getId());
+        assertFalse(deletedPokemon.isPresent());
+    }
+
+    @Test
+    public void testCustomFindByTypeAndGroupByPowerMethod() {
+        //Given
+        var waterType = typeRepository.save(Type.builder().name("Water").build());
+
+        var firstWaterPokemon = pokemonService.createPokemon("Psyduck",
+                new BigDecimal("50.00"),
+                null,
+                waterType.getName());
+
+        var secondWaterPokemon = pokemonService.createPokemon("Star",
+                new BigDecimal("52.00"),
+                null,
+                waterType.getName());
+
+        var thirddWaterPokemon = pokemonService.createPokemon("Magikarp",
+                new BigDecimal("65.00"),
+                null,
+                waterType.getName());
+
+        //When
+        List<Pokemon> createdPokemonList = pokemonRepository.findByType(waterType);
+        assertEquals(3, createdPokemonList.size());
+
+        List<Pokemon> sortedByPowerPokemonList = pokemonRepository.findByTypeOrderByPowerDesc(waterType);
+
+        //Then
+        assertEquals(new BigDecimal("65.00"), sortedByPowerPokemonList.get(0).getPower());
     }
 }
 
