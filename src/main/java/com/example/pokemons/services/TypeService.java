@@ -15,12 +15,12 @@ public class TypeService {
 
     private TypeRepository typeRepository;
 
-    public Type createType(String name) {
+    public Type findOrCreateType(String name) {
             var validatedType = ValidatorHelper.validateAndTrimText(name, "Type name");
 
             Optional<Type> foundType = typeRepository.findByName(validatedType);
             if (foundType.isPresent()) {
-                throw new DuplicateAlreadyExistException("Type: " + validatedType + " already exists in DB on ID: " + foundType.get().getId());
+                return foundType.get();
             }
 
             var type = new Type();
