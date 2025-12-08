@@ -124,26 +124,24 @@ public class PokemonServiceIntegrationTest {
     @Test
     public void findByTypeShouldReturnOnlyPokemonsWithGivenType() {
         //Given
-        var electricType = Type.builder().name("Electric").build();
-        var waterType = Type.builder().name("Water").build();
-        var savedElectricType = typeRepository.save(electricType);
-        var savedWaterType = typeRepository.save(waterType);
+        var savedElectricType = typeRepository.save(Type.builder().name("Electric").build());
+        var savedWaterType = typeRepository.save(Type.builder().name("Water").build());
 
         //When
         pokemonService.createPokemon("Raichu",
                 new BigDecimal("99.00"),
                 null,
-                electricType.getName());
+                savedElectricType.getName());
 
         pokemonService.createPokemon("Pikachu",
                 new BigDecimal("99.60"),
                 null,
-                electricType.getName());
+                savedElectricType.getName());
 
         pokemonService.createPokemon("Psyduck",
                 new BigDecimal("50.00"),
                 null,
-                waterType.getName());
+                savedWaterType.getName());
 
         List<Pokemon> waterPokemons = pokemonRepository.findByType(savedWaterType);
         List<Pokemon> electricPokemons = pokemonRepository.findByType(savedElectricType);
@@ -206,6 +204,10 @@ public class PokemonServiceIntegrationTest {
 
         //Then
         assertEquals(new BigDecimal("65.00"), sortedByPowerPokemonList.get(0).getPower());
+        assertEquals(thirddWaterPokemon.getName(), sortedByPowerPokemonList.get(0).getName());
+        assertEquals(thirddWaterPokemon.getType(), sortedByPowerPokemonList.get(0).getType());
+        assertEquals(firstWaterPokemon.getType(), sortedByPowerPokemonList.get(2).getType());
+        assertEquals(firstWaterPokemon.getName(), sortedByPowerPokemonList.get(2).getName());
     }
 }
 
