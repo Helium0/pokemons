@@ -38,7 +38,7 @@ public class PokemonServiceUnitTest {
     private PokemonService pokemonService;
 
     @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.pokemon.PokemonTestData#validPokemonData")
+    @MethodSource(value = "com.example.pokemons.testdata.pokemon.PokemonServiceUnitTestData#validPokemonData")
     public void createPokemonWithValidData(String name, BigDecimal power, String desc, Type type) {
         //Given
         var savedPokemon = Pokemon.builder()
@@ -98,8 +98,8 @@ public class PokemonServiceUnitTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.pokemon.PokemonTestData#invalidPokemonData")
-    public void createPokemonWithLackOfDataShouldThrowException(String name, BigDecimal power, String desc, Type type, String expectedMessage) {
+    @MethodSource(value = "com.example.pokemons.testdata.pokemon.PokemonServiceUnitTestData#invalidPokemonData")
+    public void createPokemonWithLackOfDataOrInvalidDataShouldThrowException(String name, BigDecimal power, String desc, Type type, String expectedMessage) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> pokemonService.createPokemon(name, power, desc, type.getName()));
