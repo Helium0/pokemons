@@ -38,7 +38,6 @@ public class PokemonService {
             );
         }
 
-
         var pokemon = Pokemon.builder()
                 .name(validatedPokemonName)
                 .power(validatedPokemonPower)
