@@ -31,7 +31,7 @@ public class PokemonServiceIntegrationTest {
     private TypeRepository typeRepository;
 
     @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.pokemon.PokemonTestData#validPokemonData")
+    @MethodSource(value = "com.example.pokemons.testdata.pokemon.PokemonServiceIntegrationTestData#validPokemonData")
     public void providedValidPokemonDataAndPokemonShouldBeCreated(String name, BigDecimal power, String desc, Type type) {
         //When
         Pokemon pokemon = pokemonService.createPokemon(name, power, desc, type.getName());

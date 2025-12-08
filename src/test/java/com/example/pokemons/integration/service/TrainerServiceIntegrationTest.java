@@ -26,7 +26,7 @@ public class TrainerServiceIntegrationTest {
     private TrainerRepository trainerRepository;
 
     @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerTestData#validTrainer")
+    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#validTrainer")
     public void createTrainerInDatabase(Trainer trainer) {
         //When
         Trainer savedTrainer = trainerService.createTrainer(trainer);
@@ -38,7 +38,7 @@ public class TrainerServiceIntegrationTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerTestData#invalidTrainerName")
+    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#invalidTrainerName")
     public void trainerWithoutNameShouldThrowException(Trainer trainer, String expectedMessage) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
@@ -49,7 +49,7 @@ public class TrainerServiceIntegrationTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerTestData#invalidTrainerSurname")
+    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#invalidTrainerSurname")
     public void createTrainerWithoutSurnameShouldThrowException(Trainer trainer, String expectedMessage) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
@@ -88,7 +88,7 @@ public class TrainerServiceIntegrationTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerTestData#invalidTrainerId")
+    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#invalidTrainerId")
     public void deleteTrainerWhenIdDoesNotExist(Long invalidId, String expectedMessage) {
         //When
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
@@ -99,7 +99,7 @@ public class TrainerServiceIntegrationTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerTestData#validTrainer")
+    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#validTrainer")
     public void createTrainerAndUpdateNameAndSurname(Trainer trainer) {
         //Given
         Trainer createdTrainer = trainerService.createTrainer(trainer);
@@ -119,7 +119,7 @@ public class TrainerServiceIntegrationTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerTestData#validTrainer")
+    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#validTrainer")
     public void shouldUpdateOnlyName(Trainer trainer) {
         //Given
         Trainer savedTrainer = trainerService.createTrainer(trainer);
@@ -133,7 +133,7 @@ public class TrainerServiceIntegrationTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerTestData#validTrainer")
+    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#validTrainer")
     public void shouldUpdateOnlySurname(Trainer trainer) {
         //Given
         Trainer savedTrainer = trainerService.createTrainer(trainer);
@@ -147,7 +147,7 @@ public class TrainerServiceIntegrationTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerTestData#validTrainer")
+    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#validTrainer")
     public void shouldNotUpdateWhenNoValuesProvided(Trainer trainer) {
         //Given
         Trainer savedTrainer = trainerService.createTrainer(trainer);
@@ -174,7 +174,7 @@ public class TrainerServiceIntegrationTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerTestData#invalidTrainerId")
+    @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#invalidTrainerId")
     public void updateTrainerWhenIdDoesNotExistShouldThrowException(Long invalidId, String expectedMessage) {
         //Given
         var trainer = Trainer.builder().name("Patryk").surname("Prentki").build();
