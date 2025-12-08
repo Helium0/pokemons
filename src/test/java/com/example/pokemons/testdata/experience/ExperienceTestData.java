@@ -4,7 +4,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
-public class ExperienceIntegrationTestData {
+public class ExperienceTestData {
 
     public static Stream<Integer> validIntegerExperience() {
         return Stream.of(0,7, 10, 100);

@@ -22,7 +22,7 @@ public class ValidatorHelper {
         if (trimmedText.length() > 100) {
             throw new IllegalArgumentException(String.format(MAX_LENGTH_ERROR, fieldName));
         }
-        if (!someWord.matches(REGEX_VALIDATION)) {
+        if (!trimmedText.matches(REGEX_VALIDATION)) {
             throw new IllegalArgumentException(String.format(CAPITALS_ERROR, fieldName));
         }
 
