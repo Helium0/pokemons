@@ -26,7 +26,7 @@ public class ExperienceServiceIntegrationTest {
     private ExperienceService experienceService;
 
     @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.experience.ExperienceIntegrationTestData#validIntegerExperience")
+    @MethodSource(value = "com.example.pokemons.testdata.experience.ExperienceTestData#validIntegerExperience")
     public void providedValidExperienceTimeValues(Integer expTime) {
         //When
         Experience experience = experienceService.createExperience(expTime);
@@ -43,7 +43,7 @@ public class ExperienceServiceIntegrationTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.experience.ExperienceIntegrationTestData#invalidIntegerExperience")
+    @MethodSource(value = "com.example.pokemons.testdata.experience.ExperienceTestData#invalidIntegerExperience")
     public void invalidExperienceTimeShouldThrowException(Integer expTime) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,

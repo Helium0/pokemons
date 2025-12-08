@@ -5,7 +5,10 @@ import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
-public class TrainerIntegrationTestData {
+public class TrainerTestData {
+
+    private static final String NAME_NULL_OR_BLANK_ERROR = "Name should not be null or blank";
+    private static final String SURNAME_NULL_OR_BLANK_ERROR = "Surname should not be null or blank";
 
     public static Stream<Arguments> validTrainer() {
         return Stream.of(
@@ -15,16 +18,16 @@ public class TrainerIntegrationTestData {
 
     public static Stream<Arguments> invalidTrainerName() {
         return Stream.of(
-                Arguments.of(Trainer.builder().name("").surname("Tester").build()),
-                Arguments.of(Trainer.builder().surname("Tester").name("     ").build()),
-                Arguments.of(Trainer.builder().surname("Tester").name(null).build()));
+                Arguments.of(Trainer.builder().name("").surname("Tester").build(), NAME_NULL_OR_BLANK_ERROR),
+                Arguments.of(Trainer.builder().surname("Tester").name("     ").build(), NAME_NULL_OR_BLANK_ERROR),
+                Arguments.of(Trainer.builder().surname("Tester").name(null).build(), NAME_NULL_OR_BLANK_ERROR));
     }
 
     public static Stream<Arguments> invalidTrainerSurname() {
         return Stream.of(
-                Arguments.of(Trainer.builder().name("Patryk").surname("").build()),
-                Arguments.of(Trainer.builder().name("Patryk").surname("             ").build()),
-                Arguments.of(Trainer.builder().name("Patryk").surname(null).build()));
+                Arguments.of(Trainer.builder().name("Patryk").surname("").build(), SURNAME_NULL_OR_BLANK_ERROR),
+                Arguments.of(Trainer.builder().name("Patryk").surname("             ").build(), SURNAME_NULL_OR_BLANK_ERROR),
+                Arguments.of(Trainer.builder().name("Patryk").surname(null).build(), SURNAME_NULL_OR_BLANK_ERROR));
     }
 
     public static Stream<Arguments> invalidTrainerId() {
