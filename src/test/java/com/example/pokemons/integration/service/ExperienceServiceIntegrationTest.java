@@ -25,9 +25,9 @@ public class ExperienceServiceIntegrationTest {
     @Autowired
     private ExperienceService experienceService;
 
-    @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.experience.ExperienceTestData#validIntegerExperience")
-    public void providedValidExperienceTimeValues(Integer expTime) {
+    @ParameterizedTest(name = "{0}")
+    @MethodSource(value = "com.example.pokemons.testdata.experience.ExperienceServiceIntegrationTestData#validIntegerExperience")
+    public void providedValidExperienceTimeValues(String testName, Long expTime) {
         //When
         Experience experience = experienceService.createExperience(expTime);
 
@@ -42,21 +42,21 @@ public class ExperienceServiceIntegrationTest {
         assertEquals(check.get().getExpTime(), expTime);
     }
 
-    @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.experience.ExperienceTestData#invalidIntegerExperience")
-    public void invalidExperienceTimeShouldThrowException(Integer expTime) {
+    @ParameterizedTest(name = "{0}")
+    @MethodSource(value = "com.example.pokemons.testdata.experience.ExperienceServiceIntegrationTestData#invalidIntegerExperience")
+    public void invalidExperienceTimeShouldThrowException(String testName, Long expTime, String expectedMessage) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> experienceService.createExperience(expTime));
 
         //Then
-        assertEquals("Experience time should be greater or equal 0", exception.getMessage());
+        assertEquals(expectedMessage, exception.getMessage());
     }
 
     @Test
     public void experienceTimeAsANullShouldThrowException() {
         //Given
-        Integer expTime = null;
+        Long expTime = null;
 
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
@@ -69,7 +69,7 @@ public class ExperienceServiceIntegrationTest {
     @Test
     public void providedExperienceTimeWhichExistsInDatabaseShouldThrowException() {
         //Given
-        Integer expTime = 999;
+        Long expTime = 999L;
 
         //When
         Experience experience = experienceService.createExperience(expTime);

@@ -36,9 +36,9 @@ public class TypeUnitTest {
         assertEquals(name.trim(), type.getName());
     }
 
-    @ParameterizedTest()
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidValuesNullOrEmpty")
-    public void shouldThrowExceptionWhenNameIsInvalid(String name) {
+    public void shouldThrowExceptionWhenNameIsInvalid(String testName, String name) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> type.setTypeName(name));
@@ -58,9 +58,9 @@ public class TypeUnitTest {
         assertEquals("Type name only first character should be capital, rest should be lowercase", exception.getMessage());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidLengthValues")
-    public void shouldThrowExceptionWhenNameIsTooLong(String name) {
+    public void shouldThrowExceptionWhenNameIsTooLong(String testName, String name) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> type.setTypeName(name));

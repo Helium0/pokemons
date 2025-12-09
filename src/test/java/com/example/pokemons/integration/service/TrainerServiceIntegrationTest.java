@@ -25,9 +25,9 @@ public class TrainerServiceIntegrationTest {
     @Autowired
     private TrainerRepository trainerRepository;
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#validTrainer")
-    public void createTrainerInDatabase(Trainer trainer) {
+    public void createTrainerInDatabase(String testName, Trainer trainer) {
         //When
         Trainer savedTrainer = trainerService.createTrainer(trainer);
 
@@ -37,9 +37,9 @@ public class TrainerServiceIntegrationTest {
         assertEquals(trainer.getSurname(), savedTrainer.getSurname());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#invalidTrainerName")
-    public void trainerWithoutNameShouldThrowException(Trainer trainer, String expectedMessage) {
+    public void trainerWithoutNameShouldThrowException(String testName, Trainer trainer, String expectedMessage) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> trainerService.createTrainer(trainer));
@@ -48,9 +48,9 @@ public class TrainerServiceIntegrationTest {
         assertEquals(expectedMessage, exception.getMessage());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#invalidTrainerSurname")
-    public void createTrainerWithoutSurnameShouldThrowException(Trainer trainer, String expectedMessage) {
+    public void createTrainerWithoutSurnameShouldThrowException(String testName, Trainer trainer, String expectedMessage) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> trainerService.createTrainer(trainer));
@@ -87,9 +87,9 @@ public class TrainerServiceIntegrationTest {
         assertTrue(exception.getMessage().contains("must not be null"));
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#invalidTrainerId")
-    public void deleteTrainerWhenIdDoesNotExist(Long invalidId, String expectedMessage) {
+    public void deleteTrainerWhenIdDoesNotExist(String testName, Long invalidId, String expectedMessage) {
         //When
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> trainerService.deleteTrainer(invalidId));
@@ -98,9 +98,9 @@ public class TrainerServiceIntegrationTest {
         assertEquals(expectedMessage, exception.getMessage());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#validTrainer")
-    public void createTrainerAndUpdateNameAndSurname(Trainer trainer) {
+    public void createTrainerAndUpdateNameAndSurname(String testName, Trainer trainer) {
         //Given
         Trainer createdTrainer = trainerService.createTrainer(trainer);
         Optional<Trainer> existTrainer = trainerRepository.findById(createdTrainer.getId());
@@ -118,9 +118,9 @@ public class TrainerServiceIntegrationTest {
 
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#validTrainer")
-    public void shouldUpdateOnlyName(Trainer trainer) {
+    public void shouldUpdateOnlyName(String testName, Trainer trainer) {
         //Given
         Trainer savedTrainer = trainerService.createTrainer(trainer);
 
@@ -132,9 +132,9 @@ public class TrainerServiceIntegrationTest {
         assertEquals(savedTrainer.getSurname(), updatedTrainer.getSurname());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#validTrainer")
-    public void shouldUpdateOnlySurname(Trainer trainer) {
+    public void shouldUpdateOnlySurname(String testName, Trainer trainer) {
         //Given
         Trainer savedTrainer = trainerService.createTrainer(trainer);
 
@@ -146,9 +146,9 @@ public class TrainerServiceIntegrationTest {
         assertEquals(savedTrainer.getName(), updatedTrainer.getName());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#validTrainer")
-    public void shouldNotUpdateWhenNoValuesProvided(Trainer trainer) {
+    public void shouldNotUpdateWhenNoValuesProvided(String testName, Trainer trainer) {
         //Given
         Trainer savedTrainer = trainerService.createTrainer(trainer);
 
@@ -173,9 +173,9 @@ public class TrainerServiceIntegrationTest {
         assertTrue(exception.getMessage().contains("must not be null"));
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.trainer.TrainerServiceIntegrationTestData#invalidTrainerId")
-    public void updateTrainerWhenIdDoesNotExistShouldThrowException(Long invalidId, String expectedMessage) {
+    public void updateTrainerWhenIdDoesNotExistShouldThrowException(String testName, Long invalidId, String expectedMessage) {
         //Given
         var trainer = Trainer.builder().name("Patryk").surname("Prentki").build();
 

@@ -47,9 +47,9 @@ public class TrainerUnitTest {
         assertEquals("Trainer name only first character should be capital, rest should be lowercase", exception.getMessage());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidValuesNullOrEmpty")
-    public void shouldThrowExceptionWhenNoTrainerName(String name) {
+    public void shouldThrowExceptionWhenNoTrainerName(String testName, String name) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> trainer.setTrainerName(name));
@@ -58,9 +58,9 @@ public class TrainerUnitTest {
         assertEquals("Trainer name should not be null or blank", exception.getMessage());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidLengthValues")
-    public void shouldThrowExceptionWhenTrainerNameIsTooLong(String name) {
+    public void shouldThrowExceptionWhenTrainerNameIsTooLong(String testName, String name) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> trainer.setTrainerName(name));
@@ -90,9 +90,9 @@ public class TrainerUnitTest {
     }
 
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidValuesNullOrEmpty")
-    public void shouldThrowExceptionWhenNoTrainerSurname(String surname) {
+    public void shouldThrowExceptionWhenNoTrainerSurname(String testName, String surname) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> trainer.setTrainerSurname(surname));
@@ -112,9 +112,9 @@ public class TrainerUnitTest {
         assertEquals("Trainer surname only first character should be capital, rest should be lowercase", exception.getMessage());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidLengthValues")
-    public void shouldThrowExceptionWhenTrainerSurnameIsTooLong(String surname) {
+    public void shouldThrowExceptionWhenTrainerSurnameIsTooLong(String testName, String surname) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> trainer.setTrainerSurname(surname));

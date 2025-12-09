@@ -51,9 +51,9 @@ public class PokemonUnitTest {
         assertEquals("Pokemon name only first character should be capital, rest should be lowercase", exception.getMessage());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidValuesNullOrEmpty")
-    public void shouldThrowExceptionWhenNoPokemonName(String name) {
+    public void shouldThrowExceptionWhenNoPokemonName(String testName, String name) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> pokemon.setPokemonName(name));
@@ -62,9 +62,9 @@ public class PokemonUnitTest {
         assertEquals("Pokemon name should not be null or blank", exception.getMessage());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidLengthValues")
-    public void shouldThrowExceptionWhenPokemonNameIsTooLong(String name) {
+    public void shouldThrowExceptionWhenPokemonNameIsTooLong(String testName, String name) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> pokemon.setPokemonName(name));
@@ -93,9 +93,9 @@ public class PokemonUnitTest {
         assertEquals(description.trim(), pokemon.getDescription());
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{0}")
     @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#invalidLengthValues")
-    public void shouldThrowExceptionWhenPokemonDescriptionIsTooLong(String description) {
+    public void shouldThrowExceptionWhenPokemonDescriptionIsTooLong(String testName, String description) {
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> pokemon.setPokemonDescription(description));

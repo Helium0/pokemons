@@ -1,5 +1,7 @@
 package com.example.pokemons.testdata.common;
 
+import org.junit.jupiter.params.provider.Arguments;
+
 import java.util.stream.Stream;
 
 public class CommonStringTestData {
@@ -17,12 +19,17 @@ public class CommonStringTestData {
         return Stream.of("ASH","PikaChu","brocK","lesnar","eaRth");
     }
 
-    public static Stream<String> invalidValuesNullOrEmpty() {
-        return Stream.of(null,"","       "," ");
+    public static Stream<Arguments> invalidValuesNullOrEmpty() {
+        return Stream.of(
+                Arguments.of("Null value", null),
+                Arguments.of("Blank value", ""),
+                Arguments.of("Blank value with white spaces", "       "));
     }
 
-    public static Stream<String> invalidLengthValues() {
-        return Stream.of("A".repeat(101),"B".repeat(120));
+    public static Stream<Arguments> invalidLengthValues() {
+        return Stream.of(
+                Arguments.of("Invalid length characters: 102", "A".repeat(101)),
+                Arguments.of("Invalid length characters: 121", "B".repeat(120)));
     }
 
 
