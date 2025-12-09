@@ -1,6 +1,5 @@
 package com.example.pokemons.integration.service;
 
-import com.example.pokemons.custom.exceptions.DuplicateAlreadyExistException;
 import com.example.pokemons.entities.Type;
 import com.example.pokemons.repositories.TypeRepository;
 import com.example.pokemons.services.TypeService;
@@ -11,6 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,7 +28,7 @@ public class TypeServiceIntegrationTest {
     @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#validStringValues")
     public void providedValidUniqueTypeNameShouldCreateRecordInDatabase(String name) {
         //When
-        var createdType = typeService.createType(name);
+        var createdType = typeService.findOrCreateType(name);
         Optional<Type> foundedType = typeRepository.findByName(createdType.getName());
 
         //Then
@@ -39,17 +39,20 @@ public class TypeServiceIntegrationTest {
 
     @ParameterizedTest
     @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#validStringValues")
-    public void duplicatedTypeNameShouldThrowException(String name) {
+    public void findOrCreateTypeWhenAlreadyExistShouldReturnTheSameType(String name) {
         //Given
-        typeService.createType(name);
-        Optional<Type> foundedType = typeRepository.findByName(name);
+        var savedType = typeRepository.save(Type.builder().name(name).build());
 
         //When
-        DuplicateAlreadyExistException exception = assertThrows(DuplicateAlreadyExistException.class,
-                () -> typeService.createType(name));
+        Type firstType = typeService.findOrCreateType(savedType.getName());
+        Type anotherType = typeService.findOrCreateType(savedType.getName());
+        List<Type> typeList = typeRepository.findAll();
 
         //Then
-        assertEquals("Type: " + name + " already exists in DB on ID: " + foundedType.get().getId(), exception.getMessage());
+        assertEquals(savedType.getId(), firstType.getId());
+        assertEquals(savedType.getId(), anotherType.getId());
+        assertEquals(firstType.getId(), anotherType.getId());
+        assertEquals(1, typeList.size());
     }
 
     @Test
@@ -59,7 +62,7 @@ public class TypeServiceIntegrationTest {
 
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> typeService.createType(customType.getName()));
+                () -> typeService.findOrCreateType(customType.getName()));
 
         //Then
         assertEquals("Type name should not be null or blank", exception.getMessage());
@@ -72,7 +75,7 @@ public class TypeServiceIntegrationTest {
 
         //When
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> typeService.createType(customType.getName()));
+                () -> typeService.findOrCreateType(customType.getName()));
 
         //Then
         assertEquals("Type name length should not be greater than 100 signs", exception.getMessage());
