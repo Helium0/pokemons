@@ -1,18 +1,15 @@
 package com.example.pokemons.entities;
 
+import com.example.pokemons.helper.ValidatorHelper;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-@Builder
 @Entity
-@Data
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Table(name = "profiles")
 public class Profile {
@@ -28,12 +25,18 @@ public class Profile {
     @Column(name = "country")
     private String country;
 
-    @Column(name = "experience")
-    private Long experience;
+    @ManyToOne
+    @JoinColumn(name = "experience")
+    private Experience experience;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "trainer_id")
+    @MapsId
     @ToString.Exclude
     private Trainer trainer;
+
+    public void setCountry(String country) {
+        this.country = ValidatorHelper.validateLength(country, "Trainer country");
+    }
 }
 
