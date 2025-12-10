@@ -4,6 +4,8 @@ import com.example.pokemons.helper.ValidatorHelper;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Builder
 @Getter
@@ -20,9 +22,12 @@ public class Experience {
     private Long id;
 
     @Column(name = "exp_time")
-    private Integer expTime;
+    private Long expTime;
 
-    public void setExperienceTime(Integer expTime) {
+    @OneToMany(mappedBy = "experience")
+    private List<Profile> profiles;
+
+    public void setExperienceTime(Long expTime) {
         this.expTime = ValidatorHelper.validateCorrectInteger(expTime, "Experience time");
     }
 }

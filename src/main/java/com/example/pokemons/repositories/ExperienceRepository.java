@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface ExperienceRepository extends JpaRepository<Experience, Long> {
 
-    Optional<Experience> findByExpTime(Integer expTime);
+    Optional<Experience> findByExpTime(Long expTime);
 }

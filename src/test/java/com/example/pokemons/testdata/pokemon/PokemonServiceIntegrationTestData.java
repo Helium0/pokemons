@@ -14,9 +14,8 @@ public class PokemonServiceIntegrationTestData {
 
     public static Stream<Arguments> validPokemonData() {
         return Stream.of(
-                Arguments.of("Pikachu", new BigDecimal("90.00"), "Kind pokemon", ELECTRIC_TYPE),
-                Arguments.of("Psyduck", new BigDecimal("50.00"), "Very kind pokemon", WATER_TYPE),
-                Arguments.of("Psyduck", new BigDecimal("50.00"), "Very kind pokemon", WATER_TYPE),
-                Arguments.of("Gomez", new BigDecimal("15.50"), "Most pokemon", EARTH_TYPE));
+                Arguments.of("Pokemon: Pikachu", "Pikachu", new BigDecimal("90.00"), "Kind pokemon", ELECTRIC_TYPE),
+                Arguments.of("Pokemon: Psyduck", "Psyduck", new BigDecimal("50.00"), "Very kind pokemon", WATER_TYPE),
+                Arguments.of("Pokemon: Gomez", "Gomez", new BigDecimal("15.50"), "Most pokemon", EARTH_TYPE));
     }
 }

@@ -7,6 +7,8 @@ import java.util.stream.Stream;
 
 public class PokemonPowerTestData {
 
+    private static final String POWER_MAX_MIN_VALIDATION = "Pokemon power should not be greater than 100.00 and less than 0.00";
+
     public static Stream<Arguments> validPokemonPowerValues() {
         return Stream.of(
                 Arguments.of(new BigDecimal("0.00"), "0.00"),
@@ -22,10 +24,10 @@ public class PokemonPowerTestData {
 
     public static Stream<Arguments> invalidPokemonPowerValues() {
         return Stream.of(
-                Arguments.of(new BigDecimal("-0.01"), "Pokemon power should not be greater than 100.00 and less than 0.00"),
-                Arguments.of(new BigDecimal("-1.00"), "Pokemon power should not be greater than 100.00 and less than 0.00"),
-                Arguments.of(new BigDecimal("100.01"), "Pokemon power should not be greater than 100.00 and less than 0.00"),
-                Arguments.of(new BigDecimal("105.00"), "Pokemon power should not be greater than 100.00 and less than 0.00"),
+                Arguments.of(new BigDecimal("-0.01"), POWER_MAX_MIN_VALIDATION),
+                Arguments.of(new BigDecimal("-1.00"), POWER_MAX_MIN_VALIDATION),
+                Arguments.of(new BigDecimal("100.01"), POWER_MAX_MIN_VALIDATION),
+                Arguments.of(new BigDecimal("105.00"), POWER_MAX_MIN_VALIDATION),
                 Arguments.of(null, "Pokemon power should not be null")
         );
     }

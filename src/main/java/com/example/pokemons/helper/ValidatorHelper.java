@@ -58,14 +58,14 @@ public class ValidatorHelper {
         return value.setScale(2, RoundingMode.HALF_UP);
     }
 
-    public static Integer validateCorrectInteger(Integer integer, String integerField) {
-        if (integer == null) {
+    public static Long validateCorrectInteger(Long longValue, String integerField) {
+        if (longValue == null) {
             throw new IllegalArgumentException(String.format(INTEGER_NULL_ERROR, integerField));
         }
-        if (integer < 0) {
+        if (longValue < 0) {
             throw new IllegalArgumentException(String.format(INTEGER_BELOW_ZERO, integerField));
         }
 
-        return integer;
+        return longValue;
     }
 }

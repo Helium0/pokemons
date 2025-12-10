@@ -4,7 +4,6 @@ import com.example.pokemons.custom.exceptions.DuplicateAlreadyExistException;
 import com.example.pokemons.entities.Pokemon;
 import com.example.pokemons.entities.Type;
 import com.example.pokemons.repositories.PokemonRepository;
-import com.example.pokemons.repositories.TypeRepository;
 import com.example.pokemons.services.PokemonService;
 import com.example.pokemons.services.TypeService;
 import org.junit.jupiter.api.Test;
@@ -16,22 +15,18 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PokemonServiceUnitTest {
 
     @Mock
     private PokemonRepository pokemonRepository;
-    @Mock
-    private TypeRepository typeRepository;
     @Mock
     private TypeService typeService;
     @InjectMocks
@@ -81,20 +76,27 @@ public class PokemonServiceUnitTest {
         var waterType = Type.builder().name("Water").build();
 
         //When
-        when(typeRepository.findByName(waterType.getName()))
-                .thenReturn(Optional.of(waterType));
+        when(typeService.findOrCreateType("Water"))
+                .thenReturn(waterType);
         when(pokemonRepository.existsByNameAndPowerAndDescriptionAndType(
                 eq("Psyduck"),
-                eq(new BigDecimal("50.00")),
-                anyString(),
+                eq(new BigDecimal("55.09")),
+                eq(""),
                 eq(waterType))).thenReturn(true);
 
         //Then
         assertThrows(DuplicateAlreadyExistException.class,
                 () -> pokemonService.createPokemon("Psyduck",
-                        new BigDecimal("50.00"),
+                        new BigDecimal("55.09"),
                         null,
                         "Water"));
+
+        verify(typeService).findOrCreateType("Water");
+        verify(pokemonRepository).existsByNameAndPowerAndDescriptionAndType(
+                eq("Psyduck"),
+                eq(new BigDecimal("55.09")),
+                eq(""),
+                eq(waterType));
     }
 
     @ParameterizedTest

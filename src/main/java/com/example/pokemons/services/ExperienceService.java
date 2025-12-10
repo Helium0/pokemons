@@ -15,7 +15,7 @@ public class ExperienceService {
 
     private final ExperienceRepository experienceRepository;
 
-    public Experience createExperience(Integer expTime) {
+    public Experience createExperience(Long expTime) {
           var validatedExperience = ValidatorHelper.validateCorrectInteger(expTime, "Experience time");
 
           Optional<Experience> experienceExist = experienceRepository.findByExpTime(validatedExperience);
