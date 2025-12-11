@@ -25,11 +25,11 @@ public class Profile {
     @Column(name = "country")
     private String country;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "experience")
     private Experience experience;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id")
     @MapsId
     @ToString.Exclude
