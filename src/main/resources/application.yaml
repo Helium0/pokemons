@@ -2,9 +2,10 @@ spring:
   application:
     name: PokemonApp
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost/pokemon_party
+    url: jdbc:mysql://localhost:3306/pokemon_party
     username: root
     password: admin
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true
+    ddl-auto: update
