@@ -15,5 +15,5 @@ public class PokemonDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private final String description;
     private final BigDecimal power;
-    private final Long type_id;
+    private final Long typeId;
 }
