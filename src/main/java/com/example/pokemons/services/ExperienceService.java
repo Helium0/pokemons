@@ -4,13 +4,13 @@ import com.example.pokemons.custom.exceptions.DuplicateAlreadyExistException;
 import com.example.pokemons.entities.Experience;
 import com.example.pokemons.helper.ValidatorHelper;
 import com.example.pokemons.repositories.ExperienceRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ExperienceService {
 
     private final ExperienceRepository experienceRepository;

@@ -5,11 +5,11 @@ import com.example.pokemons.entities.Trainer;
 import com.example.pokemons.helper.ValidatorHelper;
 import com.example.pokemons.repositories.TrainerRepository;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TrainerService {
 
     private final TrainerRepository trainerRepository;
