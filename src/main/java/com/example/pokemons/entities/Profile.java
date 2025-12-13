@@ -1,6 +1,5 @@
 package com.example.pokemons.entities;
 
-import com.example.pokemons.helper.ValidatorHelper;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,7 +35,7 @@ public class Profile {
     private Trainer trainer;
 
     public void setCountry(String country) {
-        this.country = ValidatorHelper.validateLength(country, "Trainer country");
+        this.country = country;
     }
 }
 

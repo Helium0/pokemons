@@ -1,6 +1,5 @@
 package com.example.pokemons.entities;
 
-import com.example.pokemons.helper.ValidatorHelper;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,7 +31,7 @@ public class Type {
 
 
     public void setTypeName(String name) {
-       this.name = ValidatorHelper.validateAndTrimText(name, "Type name");
+       this.name = name;
     }
 
     public void addPokemon(Pokemon pokemon) {
