@@ -30,6 +30,9 @@ public class PokemonService {
         var validatedPokemonDescriptionLength = ValidatorHelper.validateLength(validatedPokemonDescription, "Description");
 
         Type createdPokemonType = typeService.findOrCreateType(validatedPokemonType);
+        if (createdPokemonType == null) {
+            throw new IllegalArgumentException("Type should not be null");
+        }
 
         if (pokemonRepository.existsByNameAndPowerAndDescriptionAndType(validatedPokemonName, validatedPokemonPower, validatedPokemonDescriptionLength, createdPokemonType)) {
             throw new DuplicateAlreadyExistException(
