@@ -1,13 +1,16 @@
 package com.example.pokemons.controllers;
 
+import com.example.pokemons.dtos.CreatePokemonRequest;
 import com.example.pokemons.dtos.PokemonDto;
-import com.example.pokemons.dtos.PokemonRequest;
+import com.example.pokemons.dtos.PokemonUpdateRequest;
 import com.example.pokemons.entities.Pokemon;
 import com.example.pokemons.repositories.PokemonRepository;
+import com.example.pokemons.services.PokemonService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -16,7 +19,8 @@ import java.util.List;
 @RequestMapping("/pokemons")
 public class PokemonController {
 
-    private PokemonRepository pokemonRepository;
+    private final PokemonRepository pokemonRepository;
+    private final PokemonService pokemonService;
 
     @GetMapping
     public List<PokemonDto> getAllPokemons(@RequestParam(required = false, defaultValue = "", name = "typeId") Long pokemonTypeId) {
@@ -27,7 +31,7 @@ public class PokemonController {
             pokemons = pokemonRepository.findAll();
         }
         return pokemons.stream()
-                .map(pokemon -> new PokemonDto(pokemon.getId(), pokemon.getName(), pokemon.getDescription(), pokemon.getPower(), pokemon.getType().getId()))
+                .map(pokemon -> new PokemonDto(pokemon.getId(), pokemon.getName(), pokemon.getDescription(), pokemon.getPower(), pokemon.getType().getName()))
                 .toList();
     }
 
@@ -37,11 +41,11 @@ public class PokemonController {
         if (pokemon == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(new PokemonDto(pokemon.getId(), pokemon.getName(), pokemon.getDescription(), pokemon.getPower(), pokemon.getType().getId()));
+        return ResponseEntity.ok(new PokemonDto(pokemon.getId(), pokemon.getName(), pokemon.getDescription(), pokemon.getPower(), pokemon.getType().getName()));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PokemonRequest> updatePokemon(@PathVariable Long id, @RequestBody PokemonRequest pokemonRequest) {
+    public ResponseEntity<PokemonUpdateRequest> updatePokemon(@PathVariable Long id, @RequestBody PokemonUpdateRequest pokemonRequest) {
         var pokemon = pokemonRepository.findById(id).orElse(null);
         if (pokemon == null) {
             return ResponseEntity.notFound().build();
@@ -63,5 +67,12 @@ public class PokemonController {
 
         pokemonRepository.delete(pokemon);
         return ResponseEntity.status(HttpStatusCode.valueOf(204)).build();
+    }
+
+    @PostMapping()
+    public ResponseEntity<PokemonDto> createPokemon(@RequestBody CreatePokemonRequest request, UriComponentsBuilder uriBuilder) {
+        var pokemon = pokemonService.createPokemon(request);
+        var uri = uriBuilder.path("/pokemons/{id}").buildAndExpand(pokemon.getId()).toUri();
+      return  ResponseEntity.created(uri).body(pokemon);
     }
 }
