@@ -1,6 +1,5 @@
 package com.example.pokemons.entities;
 
-import com.example.pokemons.helper.ValidatorHelper;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,18 +24,18 @@ public class Profile {
     @Column(name = "country")
     private String country;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "experience")
     private Experience experience;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id")
     @MapsId
     @ToString.Exclude
     private Trainer trainer;
 
     public void setCountry(String country) {
-        this.country = ValidatorHelper.validateLength(country, "Trainer country");
+        this.country = country;
     }
 }
 

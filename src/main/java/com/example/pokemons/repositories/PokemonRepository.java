@@ -3,6 +3,7 @@ package com.example.pokemons.repositories;
 import com.example.pokemons.entities.Pokemon;
 import com.example.pokemons.entities.Type;
 import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +26,6 @@ public interface PokemonRepository extends JpaRepository<Pokemon, Long> {
     void deletePokemonByNameAndPowerAndType(@Param("name") String name, @Param("power") BigDecimal power, @Param("type") Type type);
 
     List<Pokemon> findByTypeOrderByPowerDesc(Type type);
+
+    List<Pokemon> findByTypeId(Long id);
 }

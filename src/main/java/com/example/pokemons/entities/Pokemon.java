@@ -1,6 +1,5 @@
 package com.example.pokemons.entities;
 
-import com.example.pokemons.helper.ValidatorHelper;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -39,15 +38,15 @@ public class Pokemon {
     private Set<Trainer> trainer = new HashSet<>();
 
     public void setPokemonName(String name) {
-        this.name = ValidatorHelper.validateAndTrimText(name, "Pokemon name");
+        this.name = name;
     }
 
     public void setPokemonDescription(String description) {
-        this.description = ValidatorHelper.validateLength(description, "Pokemon description");
+        this.description = description;
     }
 
     public void setPokemonPower(BigDecimal power) {
-        this.power = ValidatorHelper.validateCorrectValue(power, "Pokemon power");
+        this.power = power;
     }
 
     public void setPokemonToType(Trainer providedTrainer) {

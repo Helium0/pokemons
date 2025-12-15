@@ -1,6 +1,5 @@
 package com.example.pokemons.entities;
 
-import com.example.pokemons.helper.ValidatorHelper;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +27,6 @@ public class Experience {
     private List<Profile> profiles;
 
     public void setExperienceTime(Long expTime) {
-        this.expTime = ValidatorHelper.validateCorrectInteger(expTime, "Experience time");
+        this.expTime = expTime;
     }
 }

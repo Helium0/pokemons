@@ -1,6 +1,5 @@
 package com.example.pokemons.entities;
 
-import com.example.pokemons.helper.ValidatorHelper;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.HashSet;
@@ -39,10 +38,10 @@ public class Trainer {
     private Set<Pokemon> pokemon = new HashSet<>();
 
     public void setTrainerName(String name) {
-        this.name = ValidatorHelper.validateAndTrimText(name, "Trainer name");
+        this.name = name;
     }
 
     public void setTrainerSurname(String surname) {
-        this.surname = ValidatorHelper.validateAndTrimText(surname, "Trainer surname");
+        this.surname = surname;
     }
 }
