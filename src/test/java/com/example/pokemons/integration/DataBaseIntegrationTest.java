@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestPropertySource(locations = "classpath:application-test.properties.yaml")
+@TestPropertySource(locations = "classpath:application-test-containers.yaml")
 @SpringBootTest
 public class DataBaseIntegrationTest {
 
