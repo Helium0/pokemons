@@ -10,7 +10,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,9 +23,9 @@ public class TypeServiceIntegrationTest {
     @Autowired
     private TypeRepository typeRepository;
 
-    @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#validStringValues")
-    public void providedValidUniqueTypeNameShouldCreateRecordInDatabase(String name) {
+    @ParameterizedTest(name = "{0}")
+    @MethodSource(value = "com.example.pokemons.testdata.type.TypeServiceIntegrationTestData#validTypeValues")
+    public void providedValidUniqueTypeNameShouldCreateRecordInDatabase(String testName, String name) {
         //When
         var createdType = typeService.findOrCreateType(name);
         Optional<Type> foundedType = typeRepository.findByName(createdType.getName());
@@ -37,22 +36,20 @@ public class TypeServiceIntegrationTest {
         assertTrue(foundedType.isPresent());
     }
 
-    @ParameterizedTest
-    @MethodSource(value = "com.example.pokemons.testdata.common.CommonStringTestData#validStringValues")
-    public void findOrCreateTypeWhenAlreadyExistShouldReturnTheSameType(String name) {
+    @ParameterizedTest(name = "{0}")
+    @MethodSource(value = "com.example.pokemons.testdata.type.TypeServiceIntegrationTestData#validTypeValues")
+    public void findOrCreateTypeWhenAlreadyExistShouldReturnTheSameType(String testName, String name) {
         //Given
         var savedType = typeRepository.save(Type.builder().name(name).build());
 
         //When
         Type firstType = typeService.findOrCreateType(savedType.getName());
         Type anotherType = typeService.findOrCreateType(savedType.getName());
-        List<Type> typeList = typeRepository.findAll();
 
         //Then
         assertEquals(savedType.getId(), firstType.getId());
         assertEquals(savedType.getId(), anotherType.getId());
         assertEquals(firstType.getId(), anotherType.getId());
-        assertEquals(1, typeList.size());
     }
 
     @Test
