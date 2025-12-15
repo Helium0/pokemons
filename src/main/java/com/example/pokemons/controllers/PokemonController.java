@@ -2,7 +2,7 @@ package com.example.pokemons.controllers;
 
 import com.example.pokemons.dtos.CreatePokemonRequest;
 import com.example.pokemons.dtos.PokemonDto;
-import com.example.pokemons.dtos.PokemonUpdateRequest;
+import com.example.pokemons.dtos.UpdatePokemonRequest;
 import com.example.pokemons.entities.Pokemon;
 import com.example.pokemons.repositories.PokemonRepository;
 import com.example.pokemons.services.PokemonService;
@@ -45,7 +45,7 @@ public class PokemonController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PokemonUpdateRequest> updatePokemon(@PathVariable Long id, @RequestBody PokemonUpdateRequest pokemonRequest) {
+    public ResponseEntity<UpdatePokemonRequest> updatePokemon(@PathVariable Long id, @RequestBody UpdatePokemonRequest pokemonRequest) {
         var pokemon = pokemonRepository.findById(id).orElse(null);
         if (pokemon == null) {
             return ResponseEntity.notFound().build();
@@ -73,6 +73,6 @@ public class PokemonController {
     public ResponseEntity<PokemonDto> createPokemon(@RequestBody CreatePokemonRequest request, UriComponentsBuilder uriBuilder) {
         var pokemon = pokemonService.createPokemon(request);
         var uri = uriBuilder.path("/pokemons/{id}").buildAndExpand(pokemon.getId()).toUri();
-      return  ResponseEntity.created(uri).body(pokemon);
+        return  ResponseEntity.created(uri).body(pokemon);
     }
 }
