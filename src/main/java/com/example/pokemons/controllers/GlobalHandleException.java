@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +17,8 @@ public class GlobalHandleException {
     public ResponseEntity<Map<String, String>> handleValidationError(MethodArgumentNotValidException exception) {
         var errors = new HashMap<String, String>();
 
-        exception.getBindingResult().getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+        exception.getBindingResult().getFieldErrors()
+                .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
 
         return ResponseEntity.badRequest().body(errors);
     }
@@ -24,13 +26,26 @@ public class GlobalHandleException {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Map<String, String>> handleContraintError(ConstraintViolationException exception) {
         var errors = new HashMap<String, String>();
+
         exception.getConstraintViolations().forEach(violation -> {
             String propertyPath = violation.getPropertyPath().toString();
-            System.out.println(propertyPath);
             String fieldName = propertyPath.substring(propertyPath.lastIndexOf('.') + 1);
-            System.out.println(fieldName);
             errors.put(fieldName, violation.getMessage());
         });
+
+        return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Map<String, String>> handleMismatchError(MethodArgumentTypeMismatchException exception) {
+        var errors = new HashMap<String, String>();
+
+        String message = String.format(
+                "Invalid parameter: %s. Provided: %s when expected a number",
+                exception.getName(),
+                exception.getValue()
+        );
+        errors.put("error", message);
 
         return ResponseEntity.badRequest().body(errors);
     }
