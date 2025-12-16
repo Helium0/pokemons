@@ -23,10 +23,8 @@ public class PokemonControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private PokemonService pokemonService;
-
     @MockBean
     private PokemonRepository pokemonRepository;
 
@@ -47,12 +45,35 @@ public class PokemonControllerTest {
         when(pokemonRepository.findById(1L)).thenReturn(Optional.of(pokemon));
 
         //Then
-        mockMvc.perform(get("http://localhost:8080/pokemons/{id}", 1L))
+        mockMvc.perform(get("/pokemons/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Pikachu"))
                 .andExpect(jsonPath("$.description").value("Electric pokemon"))
                 .andExpect(jsonPath("$.power").value("99.5"))
                 .andExpect(jsonPath("$.typeName").value("Electric"));
+    }
+
+    @Test
+    public void shouldReturnNotFoundWhenPokemonDoesntExist() throws Exception {
+        //Given
+        var nonExistingPokemonId = 999L;
+
+        //When
+        when(pokemonRepository.findById(nonExistingPokemonId)).thenReturn(Optional.empty());
+
+        //Then
+        mockMvc.perform(get("/pokemons/{id}", nonExistingPokemonId))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldReturnBadRequestWhenInputWrongType() throws Exception {
+        //Given
+        var pokemonByText = "a";
+
+        //Then
+        mockMvc.perform(get("/pokemons/{id}", pokemonByText))
+                .andExpect(status().isBadRequest());
     }
 }
