@@ -6,6 +6,8 @@ import com.example.pokemons.entities.Type;
 import com.example.pokemons.repositories.PokemonRepository;
 import com.example.pokemons.services.PokemonService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -14,9 +16,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @WebMvcTest(PokemonController.class)
 public class PokemonControllerTest {
@@ -67,13 +70,23 @@ public class PokemonControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @Test
-    public void shouldReturnBadRequestWhenInputWrongType() throws Exception {
-        //Given
-        var pokemonByText = "a";
-
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("com.example.pokemons.testdata.pokemon.PokemonControllerTestData#invalidTypeNumberData")
+    public void shouldReturnBadRequestWhenInputWrongType(String testName, String text, String exception) throws Exception {
         //Then
-        mockMvc.perform(get("/pokemons/{id}", pokemonByText))
-                .andExpect(status().isBadRequest());
+        mockMvc.perform(delete("/pokemons/{id}", text))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error", containsString(exception)));
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("com.example.pokemons.testdata.pokemon.PokemonControllerTestData#invalidNumberTestData")
+    public void shouldReturnBadRequestWhenTryDeleteNotExistResource(String testName, Integer id, String exception) throws Exception {
+        //Then
+        mockMvc.perform(delete("/pokemons/{id}", id))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$").isMap())
+                .andExpect(jsonPath("$.id").value(exception));
     }
 }
