@@ -1,22 +1,30 @@
 package com.example.pokemons.integration.controler;
 
 import com.example.pokemons.controllers.PokemonController;
+import com.example.pokemons.dtos.PokemonDto;
+import com.example.pokemons.dtos.UpdatePokemonRequest;
 import com.example.pokemons.entities.Pokemon;
 import com.example.pokemons.entities.Type;
 import com.example.pokemons.repositories.PokemonRepository;
+import com.example.pokemons.repositories.TypeRepository;
 import com.example.pokemons.services.PokemonService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -26,10 +34,14 @@ public class PokemonControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
     @MockBean
     private PokemonService pokemonService;
     @MockBean
     private PokemonRepository pokemonRepository;
+    @MockBean
+    private TypeRepository typeRepository;
 
     @Test
     public void shoudlReturnPokemonObject() throws Exception {
@@ -88,5 +100,29 @@ public class PokemonControllerTest {
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$").isMap())
                 .andExpect(jsonPath("$.id").value(exception));
+    }
+
+    @Test
+    public void shouldReturnBadRequestWhenPutMethodHasNoMaintainValue() throws Exception {
+        //Given
+        var type = Type.builder().id(1L).name("Electric").build();
+        var savedType = typeRepository.save(type);
+        var pokemon = Pokemon.builder()
+                .id(1L)
+                .name("Pikachu")
+                .description("Electric mouse Pokemon")
+                .power(new BigDecimal("99.00"))
+                .type(savedType)
+                .build();
+        when(pokemonRepository.findById(1L)).thenReturn(Optional.of(pokemon));
+
+
+        var updatePokemonRequest = new UpdatePokemonRequest();
+        String object = objectMapper.writeValueAsString(updatePokemonRequest);
+
+        //When
+        mockMvc.perform(put("/pokemons/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(object)).andExpect(status().isBadRequest());
     }
 }
