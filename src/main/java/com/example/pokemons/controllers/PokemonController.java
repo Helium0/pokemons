@@ -6,6 +6,7 @@ import com.example.pokemons.dtos.UpdatePokemonRequest;
 import com.example.pokemons.entities.Pokemon;
 import com.example.pokemons.repositories.PokemonRepository;
 import com.example.pokemons.services.PokemonService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class PokemonController {
 
     private final PokemonRepository pokemonRepository;
     private final PokemonService pokemonService;
+    private final String POKEMON_ID_ERROR = "Pokemon ID must be greater than 0";
 
     @GetMapping
     public List<PokemonDto> getAllPokemons(@RequestParam(required = false, defaultValue = "", name = "typeId") Long pokemonTypeId) {
@@ -39,7 +41,7 @@ public class PokemonController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PokemonDto> getPokemonById(@PathVariable @Min(value = 1, message = "Pokemon ID must be greater than 0") Long id) {
+    public ResponseEntity<PokemonDto> getPokemonById(@PathVariable @Min(value = 1, message = POKEMON_ID_ERROR) Long id) {
         var pokemon = pokemonRepository.findById(id).orElse(null);
         if (pokemon == null) {
             return ResponseEntity.notFound().build();
@@ -48,7 +50,7 @@ public class PokemonController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UpdatePokemonRequest> updatePokemon(@PathVariable @Min(value = 1, message = "Pokemon ID must be greater than 0") Long id, @RequestBody UpdatePokemonRequest pokemonRequest) {
+    public ResponseEntity<UpdatePokemonRequest> updatePokemon(@PathVariable @Min(value = 1, message = POKEMON_ID_ERROR) Long id, @Valid @RequestBody UpdatePokemonRequest pokemonRequest) {
         var pokemon = pokemonRepository.findById(id).orElse(null);
         if (pokemon == null) {
             return ResponseEntity.notFound().build();
@@ -62,7 +64,7 @@ public class PokemonController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletePokemon(@PathVariable @Min(value = 1, message = "Pokemon ID must be greater than 0") Long id) {
+    public ResponseEntity<Object> deletePokemon(@PathVariable @Min(value = 1, message = POKEMON_ID_ERROR) Long id) {
         return pokemonRepository.findById(id)
                 .map(pokemon -> {
                     pokemonRepository.delete(pokemon);
