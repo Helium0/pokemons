@@ -1,6 +1,7 @@
 package com.example.pokemons.controllers;
 
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -48,5 +49,20 @@ public class GlobalHandleException {
         errors.put("error", message);
 
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, String>> handleDatabaseIntegrityError(DataIntegrityViolationException exception) {
+        var error = new HashMap<String, String>();
+
+        String message = exception.getMostSpecificCause().toString();
+        error.put("error", externalMessage(message));
+
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    private String externalMessage(String message) {
+        String[] parts = message.split(":");
+        return parts[1];
     }
 }
